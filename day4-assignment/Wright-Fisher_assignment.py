@@ -19,7 +19,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #Exercise 1 
-
 def wrightfisher(allelefreq,pop):
 
 	allelefreq_list = []
@@ -49,26 +48,36 @@ fig.savefig( "WrightFisher1.png" )
 plt.show()
 
 #Exercise 2 
-
-
-
-timesfixation = []
+timefixation = []
 for i in range(1000):
 	results = wrightfisher(0.3, 500)
-	#x_positions = range(0,results[1])
-	#y_positions = results[0]
-	#ax.plot(x_positions, y_positions)
-	timesfixation.append(results[1])
+	timefixation.append(results[1])
 
-ax.hist(timesfixation)
+ax.hist(timefixation)
 
 ax.set_xlabel("Times to Fixation (generations)")
 ax.set_ylabel("Number of Occurance")
-#ax.set_ylim(0,1)
-#ax.set_xlim(0)
 ax.set_title("Histogram of Times to Fixation")
 fig.savefig( "HistWrightFisher2.png" )
-
 plt.show()
 
+#Exercise 3
 
+avgtimelist = []
+populationsize = []
+for x in range(5):
+	randomnum = np.random.randint(50,200)
+	populationsize.append(randomnum)
+	timefixation = []
+	for i in range(50):
+		results = wrightfisher(0.5, randomnum)
+		timefixation.append(results[1])
+
+	avgtime = sum(timefixation)/len(timefixation)
+	avgtimelist.append(avgtime)
+
+ax.scatter(populationsize,avgtimelist)
+ax.set_xlabel("Population Size")
+ax.set_ylabel("Average Time to Fixation")
+ax.set_title("The Effect of Population on Time to Fixation")
+fig.savefig( "ChangingPopulation.png" )
