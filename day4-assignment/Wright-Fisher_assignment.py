@@ -48,4 +48,27 @@ fig.savefig( "WrightFisher1.png" )
 
 plt.show()
 
+#Exercise 2 
+
+
+
+timesfixation = []
+for i in range(1000):
+	results = wrightfisher(0.3, 500)
+	#x_positions = range(0,results[1])
+	#y_positions = results[0]
+	#ax.plot(x_positions, y_positions)
+	timesfixation.append(results[1])
+
+ax.hist(timesfixation)
+
+ax.set_xlabel("Times to Fixation (generations)")
+ax.set_ylabel("Number of Occurance")
+#ax.set_ylim(0,1)
+#ax.set_xlim(0)
+ax.set_title("Histogram of Times to Fixation")
+fig.savefig( "HistWrightFisher2.png" )
+
+plt.show()
+
 
