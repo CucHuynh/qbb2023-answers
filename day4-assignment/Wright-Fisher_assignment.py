@@ -62,6 +62,25 @@ ax.set_title("Histogram of Times to Fixation")
 fig.savefig( "HistWrightFisher2.png" )
 plt.show()
 '''
+#EXERCISE 2 RESUBMISSION 
+
+timefixation = []
+for i in range(1000):
+	results = wrightfisher(0.3, 500)
+	x_positions = range(0,results[1])
+	y_positions = results[0]
+	ax.plot(x_positions, y_positions)
+	timefixation.append(results[1])
+
+ax.hist(timefixation)
+
+ax.set_xlabel("Times to Fixation (generations)")
+ax.set_ylabel("Number of Occurance")
+ax.set_title("Histogram of Times to Fixation")
+fig.savefig( "HistWrightFisher2.png" )
+plt.show()
+
+
 #Exercise 3
 '''
 avgtimelist = []
@@ -83,6 +102,7 @@ ax.set_ylabel("Average Time to Fixation")
 ax.set_title("The Effect of Population on Time to Fixation")
 fig.savefig( "ChangingPopulation.png" )
 '''
+'''
 avgtimelist = []
 frequency = []
 for i in range(1000):
@@ -103,3 +123,4 @@ ax.set_title("The Effect of Allele Frequency on Time to Fixation")
 fig.savefig( "ChangingFrequency.png" )
 
 plt.show()
+'''
