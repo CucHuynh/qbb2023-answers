@@ -10,11 +10,11 @@ samples = np.loadtxt( "all_annotated.csv", delimiter=",", max_rows=1, dtype="<U3
 print( "samples: ", samples[0:5] )
 data = np.loadtxt( "all_annotated.csv", delimiter=",", dtype=np.float32, skiprows=1, usecols=range(2, len(samples) + 2) )
 print( "data: ", data[0:5, 0:5] )
+
 # Find row with transcript of interest
 for i in range(len(transcripts)):
     if transcripts[i] == 'FBtr0073461':
-        row = i
-# Find columns with samples of interest
+        row =
 cols = []
 for i in range(len(samples)):
     if "female" in samples[i]:
