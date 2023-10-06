@@ -14,12 +14,6 @@ print( "data: ", data[0:5, 0:5] )
 for i in range(len(transcripts)):
     if transcripts[i] == 'FBtr0073461':
         row = i
-# Iterate through
-# Find row with transcript of interest
-for i in range(len(transcripts)):
-    if transcripts[i] == 'FBtr0073461':
-        row = i
-
 # Find columns with samples of interest
 cols = []
 for i in range(len(samples)):
