@@ -1,50 +1,78 @@
 #!/usr/bin/env python
+
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
 import scipy.stats as sps
 import statsmodels.formula.api as smf
 import statsmodels.api as sm
 
 
-#step 1.1
-dataset = pd.read_csv('./aau1043_dnm.csv')
+# Step 1.1
+df = pd.read_csv("~/qbb2023-answers/week1/aau1043_dnm.csv")
 
-#print(dataset)
+# Step 1.2
+sortDf = df.sort_values(by = ['Proband_id'])
+dnms = df.groupby(['Proband_id', 'Phase_combined']).size().reset_index(name = 'Count')
 
-#step 1.2
-count = dataset.groupby(['Proband_id','Phase_combined']).size().reset_index(name = 'Count')
-#print(count)
+
 deNovoCount = {}
-for i in range(0,len(count),2):
-	deNovoCount[count.loc[i, "Proband_id"]] = [count.loc[i+1, "Count"],count.loc[i, "Count"]]
-#print(deNovoCount)
+for i in range(0, len(dnms), 2):
+	deNovoCount[dnms.loc[i, 'Proband_id']] = [dnms.loc[i + 1, 'Count'], dnms.loc[i, 'Count']]
 
-#step 1.3
+print(deNovoCount)
+
+# Step 1.3
 deNovoCountDF = pd.DataFrame.from_dict(deNovoCount, orient = 'index', columns = ['maternal_dnm', 'paternal_dnm'])
-#print(deNovoCountDF)
 
-#step 1.4
-Age = pd.read_csv('./aau1043_parental_age.csv', index_col = 'Proband_id')
-#print(Age)
+# Step 1.4
+df_2 = pd.read_csv("~/qbb2023-answers/week1/aau1043_parental_age.csv", index_col = 'Proband_id')
+print(df_2)
 
-#step 1.5
-concat = pd.concat([deNovoCountDF,Age],axis = 1, join = 'outer')
-#print(concat)
+# Step 1.5
+joinDf = pd.concat([deNovoCountDF, df_2], join = 'outer', axis = 1)
+print(joinDf)
 
 
-#step 2.1
+# Step 2.1
 fig, ax = plt.subplots()
-ax.scatter(concat["Father_age"],concat["paternal_dnm"])
-ax.set_xlabel("Father Age")
-ax.set_ylabel("Paternal De Novo Mutations")
-ax.set_title("Paternal DNMs versus Father Age")
+
+ax.scatter(joinDf["Father_age"], joinDf['paternal_dnm'], label = "male")
+ax.set_ylabel("de Novo Mutations")
+ax.set_xlabel("Age")
+ax.set_title("de Novo Mutation Frequency by Paternal Age")
 fig.savefig("ex2_b.png")
-plt.show()
-fig, bx = plt.subplots()
-bx.scatter(concat["Mother_age"],concat["maternal_dnm"], c = "red")
-bx.set_xlabel("Mother Age")
-bx.set_ylabel("Maternal De Novo Mutations")
-bx.set_title("Maternal DNMs versus Mother Age")
-fig.savefig("ex2_a.png")
-plt.show()
+
+# Step 2.2
+matModel = smf.ols(formula = "maternal_dnm ~ 1 + Mother_age", data = joinDf)
+matResults = matModel.fit()
+print(matResults.summary())
+print(matResults.pvalues)
+
+# Step 2.3
+pModel = smf.ols(formula = "paternal_dnm ~ 1 + Father_age", data = joinDf)
+pResults = pModel.fit()
+print(pResults.summary())
+print(pResults.pvalues)
+
+# Step 2.5
+fig, ax = plt.subplots()
+ax.hist(dnms.loc[dnms['Phase_combined'] == 'father', 'Count'], bins = 20, label = "Paternal", alpha = 0.5)
+ax.hist(dnms.loc[dnms['Phase_combined'] == 'mother', 'Count'], bins = 20, label = "Maternal", alpha = 0.5)
+ax.set_xlabel("de Novo Mutations")
+ax.set_ylabel("Frequency")
+ax.set_title('de Novo Mutations per Proband ID')
+fig.savefig('ex2_c.png')
+
+# Step 2.6
+pData = dnms.loc[dnms['Phase_combined'] == 'father', 'Count']
+mData = dnms.loc[dnms['Phase_combined'] == 'mother', 'Count']
+print(sps.ttest_rel(pData, mData))
+#print(sps.ttest_ind(pData, mData))
+
+
+
+
+
+
