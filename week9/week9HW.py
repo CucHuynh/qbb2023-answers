@@ -79,7 +79,7 @@ results = results[~np.isnan(results['padj'])]
 
 FDR_DESeq2 = results[results['padj'] < 0.1]
 FDR_DESeq2.columns = ['Gene'] + list(results.columns[1:])
-FDR_DESeq2.to_csv('results_DESeq2_filtered', header = True, index = True)
+FDR_DESeq2.to_csv('DESeq2_filtered', header = True, index = True)
 
 step2Genes = len(FDR_df)
 DESeqGenes = len(FDR_DESeq2)
